@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("log_status") var login_status  = false
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            if login_status {
+                homeView()
+            }
+            else{
+                startPage()
+            }
+            
         }
-        .padding()
     }
 }
 
