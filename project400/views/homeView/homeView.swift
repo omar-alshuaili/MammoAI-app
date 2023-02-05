@@ -11,6 +11,7 @@ import UIKit
 import PhotosUI
 import CoreML
 import  CoreImage
+import SDWebImageSwiftUI
 
 
 class SquareCameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate,AVCapturePhotoCaptureDelegate {
@@ -82,7 +83,8 @@ struct SquareCameraWrapperView: View {
     
     var body: some View {
         ZStack{
-            Color.clear
+            
+            
             HStack(alignment:.top) {
                 VStack(alignment: .leading){
                     Text("Add new scan")
@@ -168,118 +170,224 @@ struct SquareCameraUIViewRepresentable: UIViewRepresentable {
 
 struct homeView: View {
     @State private var isShowingScanner = true
+    @State var isShowAppointmentDetails = false
+    @State var isShowing = false
+    @State var offset : CGFloat = 20
     private var text : CGFloat = 0
     @State private var isShowingSquareCamera = false
     @EnvironmentObject var viewModel : AppointmentViewModel
-    @State var viewStates: [CGSize] = Array(repeating: .zero, count: AppointmentViewModel().appointments.count)
-
-
+    @State var index = "0"
+    @State private var currentAppointment : Appointment = Appointment.example
+    @State var isRefreshing = false
 
 
     var body: some View {
-        
-        VStack(alignment: .trailing) {
+        ZStack{
+            Color(red: 0.9333333333333333, green: 0.9333333333333333, blue: 0.9333333333333333)
             
-            HStack{
-                HStack {
-                    Image("profile")
-                        .resizable()
-                        .scaledToFill()
-                        .offset(y:10)
-                        .frame(width: 60,height: 60)
-                        .cornerRadius(15)
+            VStack(alignment: .center) {
+                
+                HStack{
+                    HStack {
+                        Image("profile")
+                            .resizable()
+                            .scaledToFill()
+                            .offset(y:10)
+                            .frame(width: 60,height: 60)
+                            .cornerRadius(15)
+                        
+                        VStack(alignment: .leading) {
+                            Text("welcome back")
+                                .foregroundColor(.gray)
+                            Text("Omar")
+                                .font(.title)
+                            
+                        }
+                        .offset(x:5)
+                    }
+                    Spacer()
                     
-                    VStack(alignment: .leading) {
-                        Text("welcome back")
-                            .foregroundColor(.gray)
-                        Text("Omar")
-                            .font(.title)
+                    hamburger(showDetail: $isShowingScanner)
+                }
+                .frame(maxWidth: .infinity)
+                Spacer().frame(height: 40)
+                VStack(alignment: .leading){
+                    Text("Quick Access")
+                        .fontWeight(.bold)
+                        .font(.system(size: 18))
+                        .foregroundColor(Color(red: 0.1803921568627451, green: 0.20784313725490197, blue: 0.4))
+                    
+                    
+                    ScrollView(.horizontal){
+                        
+                        
+                        HStack(spacing:20){
+                            ForEach(0..<Cards.cards.count,id: \.self) { index in
+                                GeometryReader { geo in
+                                    quickAccessView(imageName: Cards.cards[index].image, label:  Cards.cards[index].lable)
+                                        .scaleEffect(getScale(proxy: geo))
+                                        .opacity(
+                                            getScale(proxy: geo) > 1 ? 1:0.9
+                                        )
+                                    
+                                    
+                                }
+                                
+                                .frame(width: 140)
+                                .frame(minHeight: 0, maxHeight: .infinity)
+                                
+                                
+                            }.padding()
+                        }
+                        
+                    }.scrollIndicators(.hidden)
+                    
+                }.frame(height: 260)
+                
+                
+                
+                HStack{
+                    Text("Upcoming appointments")
+                        .fontWeight(.bold)
+                        .font(.system(size: 18))
+                        .foregroundColor(Color(red: 0.1803921568627451, green: 0.20784313725490197, blue: 0.4))
+                    Spacer()
+                    Text("See all")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                let imageData = try! Data(contentsOf: Bundle.main.url(forResource: "logo-animation", withExtension: "gif")!)
+                let gifImage = UIImage.gif(data: data!)
+                imageView.image = gifImage
+                
+                if(viewModel.appointments.count != 0 ){
+                   
+                    List {
+                        VStack {
+                        ForEach(viewModel.appointments.sorted(), id: \.id) { appointment in
+                            
+                          
+                                
+                                cardView(app: appointment)
+                                    .padding(.vertical,15)
+                                    
+                                    .onTapGesture {
+                                        index = appointment.id
+                                        currentAppointment = appointment
+                                        printIndex(id:appointment.id)
+                                        withAnimation {
+                                            let impactHeavy = UIImpactFeedbackGenerator(style: .medium)
+                                            impactHeavy.impactOccurred()
+                                            isShowAppointmentDetails.toggle()
+                                        }
+                                        
+                                        
+                                       
+                                    }
+                                    
+                            }
+                            .listRowBackground(Color.clear)
+
+                            
+                        } .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
+                            .padding(5)
+                            .animation(.easeInOut)
+                            .listRowBackground(Color.clear)
+                            
+
                         
                     }
-                    .offset(x:5)
+//                    .refreshable {
+//                        isRefreshing = true
+//                      await Task.sleep(2_000_000_000)
+//                        isRefreshing = false
+//                    }.onAppear {
+//                      UIRefreshControl.appearance().tintColor = UIColor.clear
+//                      UIRefreshControl.appearance().backgroundColor = .green.withAlphaComponent(0)
+//
+//                    }
+//                    .onDisappear{
+//                        isRefreshing = false
+//                    }
+                    .listStyle(PlainListStyle())
+                    .listRowSeparator(.hidden)
+                    
+                    
+                    
                 }
-                Spacer()
-                
-                hamburger(showDetail: $isShowingScanner)
-            }
-            .frame(maxWidth: .infinity)
-            Spacer().frame(height: 40)
-            VStack(alignment: .leading){
-                Text("Quick Access")
-                    .fontWeight(.bold)
-                    .font(.system(size: 18))
-                    .foregroundColor(Color(red: 0.1803921568627451, green: 0.20784313725490197, blue: 0.4))
-                
-                
-                ScrollView(.horizontal){
-                    
-                    
-                    HStack(spacing:20){
-                        ForEach(0..<Cards.cards.count,id: \.self) { index in
-                            GeometryReader { geo in
-                                quickAccessView(imageName: Cards.cards[index].image, label:  Cards.cards[index].lable)
-                                    .scaleEffect(getScale(proxy: geo))
-                                    .opacity(
-                                        getScale(proxy: geo) > 1 ? 1:0.9
-                                    )
-                            }.frame(width: 140)
-                        }.padding()
+                else{
+                    List {
+                        ForEach(0..<4) {_ in
+                            
+                            HStack() {
+                                
+                                LoadingCardView()
+                            }
+                            
+                            
+                        } .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
+                            .padding(5)
+                        
                     }
+                    .listStyle(PlainListStyle())
+                    .listRowSeparator(.hidden)
                     
-                }.scrollIndicators(.hidden)
-            }
-            
-            
-            HStack{
-                Text("Upcoming appointments")
-                    .fontWeight(.bold)
-                    .font(.system(size: 18))
-                    .foregroundColor(Color(red: 0.1803921568627451, green: 0.20784313725490197, blue: 0.4))
-                Spacer()
-                Text("See all")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
-            
-            
-            VStack {
-                        appointmentsList(viewModel: viewModel, viewStates: $viewStates)
-            }
-            
-            
-            
-            
-            
-            
-            Button(action: { self.isShowingSquareCamera.toggle() }) {
-                ZStack{
-                    Text("+")
-                        .offset(x:8,y: -10)
-                    Image(systemName: "doc.viewfinder.fill")
-                }.font(.system(size: 20))
-            }
-            .frame(width: 60,height: 60)
-            .background(Color(red: 0.3843137254901961, green: 0.48627450980392156, blue: 0.8823529411764706))
-            .clipShape(Circle())
-            .foregroundColor(.white)
-            .shadow(radius: 5)
-            .sheet(isPresented: $isShowingSquareCamera) {
+                }
                 
-                SquareCameraWrapperView()
-                    .padding()
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
-                    .ignoresSafeArea(.keyboard)
+                
+                
+                Button(action: { self.isShowingSquareCamera.toggle() }) {
+                    ZStack{
+                        Text("+")
+                            .offset(x:8,y: -10)
+                        Image(systemName: "doc.viewfinder.fill")
+                    }.font(.system(size: 20))
+                }
+                .frame(width: 60,height: 60)
+                .background(Color(red: 0.3843137254901961, green: 0.48627450980392156, blue: 0.8823529411764706))
+                .clipShape(Circle())
+                .foregroundColor(.white)
+                .shadow(radius: 5)
+                .sheet(isPresented: $isShowingSquareCamera) {
+                    
+                    SquareCameraWrapperView()
+                        .padding()
+                        .presentationDetents([.large])
+                        .presentationDragIndicator(.visible)
+                        .ignoresSafeArea(.keyboard)
+                    
+                }
+                
+            }.frame(maxWidth:.infinity)
+                .ignoresSafeArea(edges: .bottom)
+                .padding(.horizontal)
+                .blur(radius: isShowAppointmentDetails ? 1 : 0 )
+                
+                
+                
+                
+            
+            if(isShowAppointmentDetails){
+                Color(.black).opacity(isShowAppointmentDetails ? 0.59 : 0)
+                
+                    AppointmentDetailsView(id:currentAppointment,ShowDetails: $isShowAppointmentDetails)
+                        .transition(.move(edge: .bottom))
+                        .animation(.spring())
+                        .zIndex(3)
                 
             }
+                 
+        }.edgesIgnoringSafeArea(.all)
             
-        }.frame(maxWidth:.infinity)
-            .padding(.horizontal)
-        
+            
         
         
     }
-    
+    func printIndex(id:String){
+        print(id)
+    }
     func getScale (proxy: GeometryProxy) -> CGFloat {
         var scale: CGFloat = 1
         let x = proxy.frame (in: .global).minX
@@ -704,52 +812,4 @@ struct uploadScanView: View {
 }
 
 
-func appointmentsList(viewModel: AppointmentViewModel, viewStates: Binding<[CGSize]>) -> some View {
-    return List {
-        ForEach(viewModel.appointments.indices, id: \.self) { index in
-            HStack {
-                cardView(app: viewModel.appointments[index])
-                    .offset(x: viewStates[index].width)
-                    .gesture(
-                        DragGesture().onChanged { value in
-                            withAnimation {
-                                viewStates[index] = value.translation
-                                if viewStates[index].width <= -50 && viewStates[index].width <= -60  {
-                                    let feedbackGenerator = UINotificationFeedbackGenerator()
-                                    feedbackGenerator.notificationOccurred(.success)
-                                }
-                            }
-                        }
-                        
-                    )
-                    .overlay(
-                                        HStack {
-                                            let checkmarkOpacity = viewStates[index].width >= 55 && viewStates[index] != .zero ? 1 : 0
-                                            Image(systemName: "checkmark")
-                                                .padding()
-                                                .foregroundColor(.white)
-                                                .background(.green)
-                                                .clipShape(Circle())
-                                                .opacity(checkmarkOpacity)
-                                            
-                                            Spacer()
-                                            
-                                            let trashOpacity = viewStates[index].width <= -55 && viewStates[index] != .zero ? 1 : 0
-                                            Image(systemName: "trash")
-                                                .padding()
-                                                .foregroundColor(.white)
-                                                .background(.red)
-                                                .clipShape(Circle())
-                                                .opacity(trashOpacity)
-                                        }
-                                    )
-                                    
-                                    .onEnded { value in
-                                        withAnimation(.spring()) {
-                                            viewStates[index] = .zero
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+
