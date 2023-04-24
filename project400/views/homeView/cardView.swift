@@ -11,70 +11,100 @@ struct cardView: View {
     let app : Appointment
     @State private var show : Bool = false
     @Namespace var namespace
+    @State private var isCompleted : Bool = false
     var body: some View {
+        
         ZStack{
             
-
-                
-                
-                VStack(alignment:.leading){
-                    HStack(spacing:15) {
-                        Image("avatar 2")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 70,height: 70)
-                        
-                        
-                        VStack(alignment: .leading){
-                            Text("\(app.name)")
-                            
-                                .foregroundColor(.black)
-                                .fontWeight(.bold)
-                                .font(.system(size: 20))
-                            Text(app.details)
-                                .font(.system(.subheadline))
+            
+            
+            
+            VStack(alignment:.leading){
+                HStack(alignment:.top, spacing: 15){
+                    
+                    
+                    Image("avatar 2")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 60,height: 60)
+                    
+                    
+                    VStack(alignment: .leading,spacing: 5){
+                        Text("\(app.name)")
+                            .fontWeight(.medium)
+                            .font(.system(size: 18))
+                            .foregroundColor(.white)
+                        HStack {
+                            Text("27yo")
+                                
                                 .fontWeight(.semibold)
                                 .foregroundColor(.gray)
-                                .font(.system(size: 16))
+                                .font(.system(size: 12))
+                                .foregroundColor(Color(red: 0.3568627450980392, green: 0.34901960784313724, blue: 0.39215686274509803))
                             
-                        }
-                        Spacer()
-                        VStack(alignment: .leading){
-                            Text(app.date)
-                                .font(.system(size: 16))
-                                .font(.system(.subheadline))
+                            Circle()
+                                .frame(width: 4)
+                                .foregroundColor(Color(red: 0.3568627450980392, green: 0.34901960784313724, blue: 0.39215686274509803))
+                            Text(app.details)
+                                .fontWeight(.semibold)
                                 .foregroundColor(.gray)
-                            Text(app.time)
-                                .fontWeight(.bold)
-                                .font(.system(size: 20))
-                            Spacer()
+                                .font(.system(size: 12))
+                                .foregroundColor(Color(red: 0.3568627450980392, green: 0.34901960784313724, blue: 0.39215686274509803))
                             
                         }
+
+                        Spacer()
+                            Text(app.time + " - 12:30")
+                                .fontWeight(.bold)
+                                .font(.system(size: 14))
+                                .foregroundColor(Color(red: 0.3568627450980392, green: 0.34901960784313724, blue: 0.39215686274509803))
+                            
+                            
                         
-                    }.frame(maxWidth: .infinity)
+
+                    }
                     
+                    Spacer()
+                    ZStack{
+                       
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(isCompleted ?
+                                  Color(red: 0.34901960784313724, green: 0.8549019607843137, blue: 0.43529411764705883) :
+                                    Color(red: 0.23921568627450981, green: 0.23529411764705882, blue: 0.2549019607843137) )
+                            .frame(width: 45,height: 45)
+                            .onTapGesture {
+                                isCompleted.toggle()
+                            }
+                        
+                        
+                        Image(systemName: "checkmark")
+                            .resizable()
+                            .frame(width: 19, height: 19)
+                            .opacity(isCompleted ? 1 : 0)
+                            .foregroundColor( .white)
+                    }
                     
                     
                 }
-                .padding()
-                .frame(maxWidth: .infinity,maxHeight: .infinity)
+                Spacer()
                 
                 
-
-               
-
-                
-                .frame(height: 80)
-                .padding(.vertical)
+            }
+            .frame(height: 130)
+            .padding()
+            .background(Color(red: 0.8509803921568627, green: 0.8509803921568627, blue: 0.8509803921568627, opacity: 0.1))
             
-             .background(.white)
-             .cornerRadius(12)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(lineWidth: 1)
-                )
+
             
-              
-                
+            .cornerRadius(12)
+            
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous).stroke(lineWidth: 0)
+            )
+            
+
+            
+            
         }
     }
 }

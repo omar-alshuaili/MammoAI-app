@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9C2DE6AC29418BD3009CC5A4"
-               BuildableName = "project400.app"
+               BuildableName = "MammoAi.app"
                BlueprintName = "project400"
                ReferencedContainer = "container:project400.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9C2DE6AC29418BD3009CC5A4"
-            BuildableName = "project400.app"
+            BuildableName = "MammoAi.app"
             BlueprintName = "project400"
             ReferencedContainer = "container:project400.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9C2DE6AC29418BD3009CC5A4"
-            BuildableName = "project400.app"
+            BuildableName = "MammoAi.app"
             BlueprintName = "project400"
             ReferencedContainer = "container:project400.xcodeproj">
          </BuildableReference>

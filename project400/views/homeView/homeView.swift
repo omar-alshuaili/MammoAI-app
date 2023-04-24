@@ -11,7 +11,7 @@ import UIKit
 import PhotosUI
 import CoreML
 import  CoreImage
-import SDWebImageSwiftUI
+
 
 
 class SquareCameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate,AVCapturePhotoCaptureDelegate {
@@ -78,6 +78,8 @@ struct SquareCameraWrapperView: View {
     @State private var uiImage = UIImage()
     @State private var classificationLabel: String = ""
     @State var text: String = ""
+    @State var opacity: Double = 0
+    @State var scaleEffect: Double = 0.5
     @State private var isEditing = false
     @State private var showAddNewPatient = false
     
@@ -92,22 +94,21 @@ struct SquareCameraWrapperView: View {
                         .font(.system(size: 30))
                         .fontWeight(.bold)
                         .padding(.top,25)
-                    
-                    ZStack {
-                        
-                        TextField("Search for patient" ,text: $text)
-                            .frame(height: 70)
-                            .foregroundColor(.gray)
-                            .fontWeight(.medium)
-                            .padding(.horizontal)
-                            .font(.system(size: 18))
-                            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.gray,lineWidth: 1))
-                        
-                        
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                            .offset(x:150)
-                        
+                    HStack {
+                        ZStack {
+                            TextField("Search for patient", text: $text)
+                                .frame(height: 70)
+                                .foregroundColor(.gray)
+                                .fontWeight(.medium)
+                                .padding(.horizontal)
+                                .font(.system(size: 18))
+                                .overlay(RoundedRectangle(cornerRadius: 12).stroke(.gray,lineWidth: 1))
+                            
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.gray)
+                                .offset(x:-UIScreen.main.bounds.width + 200)
+                        }
+
                     }
                     ZStack{
                         Divider()
@@ -154,6 +155,9 @@ struct SquareCameraWrapperView: View {
         }.ignoresSafeArea(.keyboard)
         
     }
+    private func isEmpty(text:String) -> Bool {
+        return text.isEmpty
+    }
     
 }
 
@@ -165,153 +169,255 @@ struct SquareCameraUIViewRepresentable: UIViewRepresentable {
     
     func updateUIView(_ uiView: UIView, context: Context) {
     }
+    
+    
+    
 }
 
 
 struct homeView: View {
-    @State private var isShowingScanner = true
+    @State private var isShowingScanner = false
     @State var isShowAppointmentDetails = false
     @State var isShowing = false
-    @State var offset : CGFloat = 20
+    @State var offset : CGSize = .zero
     private var text : CGFloat = 0
     @State private var isShowingSquareCamera = false
     @EnvironmentObject var viewModel : AppointmentViewModel
     @State var index = "0"
     @State private var currentAppointment : Appointment = Appointment.example
     @State var isRefreshing = false
-
-
+    @State var isShowingFullList = false
+    @State var searchTerm = ""
+    @State var onlyDone : Bool = false
+    var lastHour: String? = nil
+    
     var body: some View {
-        ZStack{
-            Color(red: 0.9333333333333333, green: 0.9333333333333333, blue: 0.9333333333333333)
+        
+        ZStack(alignment: .bottom){
+            Color(red: 0.09019607843137255, green: 0.08627450980392157, blue: 0.10588235294117647)
+                .edgesIgnoringSafeArea(.all)
             
             VStack(alignment: .center) {
-                
-                HStack{
-                    HStack {
-                        Image("profile")
-                            .resizable()
-                            .scaledToFill()
-                            .offset(y:10)
-                            .frame(width: 60,height: 60)
-                            .cornerRadius(15)
+                VStack(alignment: .center) {
+                    
+                    
+                    HStack{
+                        HStack {
+                            Image("profile")
+                                .resizable()
+                                .scaledToFill()
+                            
+                                .frame(width: 60,height: 60)
+                                .cornerRadius(60)
+                            
+                            VStack(alignment: .leading,spacing: 5) {
+                                Text(Calendar.current.component( .hour, from:Date() ) > 11 ? "Good Afternoon, " : "Good Morning, " + "Omar")
+                                    .font(Font.custom("Poppins Medium", size: 20))
+                                    .foregroundColor(.white)
+                                
+                                
+                                Text("You have \(viewModel.todaysAppointment()) patient today"  )
+                                    .font(Font.custom("Poppins Medium", size: 16))
+                                    .foregroundColor(.white).opacity(37/100)
+                                
+                                
+                            }
+                            .offset(x:5)
+                        }
+                        Spacer()
                         
-                        VStack(alignment: .leading) {
-                            Text("welcome back")
-                                .foregroundColor(.gray)
-                            Text("Omar")
-                                .font(.title)
+                        //hamburger(showDetail: $isShowingScanner)
+                        
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 13, style: .continuous)
+                                .fill(Color(red: 0.1568627450980392, green: 0.15294117647058825, blue: 0.17254901960784313))
+                                .frame(width: 57,height: 57)
+                            
+                            Circle()
+                                .fill(Color(red: 0.5725490196078431, green: 0.5764705882352941, blue: 0.8980392156862745))
+                                .frame(width: 20, height: 20)
+                                .cornerRadius(20)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 18)
+                                        .stroke(Color(red: 0.09019607843137255, green: 0.08627450980392157, blue: 0.10588235294117647), lineWidth: 4)
+                                )
+                                .offset(x:22,y:-22)
+                            
+                            
+                            Image(systemName: "bell.fill")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.white)
                             
                         }
-                        .offset(x:5)
+                        
+                        
+                        
+                        
+                        
+                        
                     }
-                    Spacer()
-                    
-                    hamburger(showDetail: $isShowingScanner)
-                }
-                .frame(maxWidth: .infinity)
-                Spacer().frame(height: 40)
-                VStack(alignment: .leading){
-                    Text("Quick Access")
-                        .fontWeight(.bold)
-                        .font(.system(size: 18))
-                        .foregroundColor(Color(red: 0.1803921568627451, green: 0.20784313725490197, blue: 0.4))
-                    
-                    
-                    ScrollView(.horizontal){
+                    .frame(maxWidth: .infinity)
+                    Spacer().frame(height: 40)
+                    VStack(alignment: .leading){
                         
                         
-                        HStack(spacing:20){
-                            ForEach(0..<Cards.cards.count,id: \.self) { index in
-                                GeometryReader { geo in
-                                    quickAccessView(imageName: Cards.cards[index].image, label:  Cards.cards[index].lable)
-                                        .scaleEffect(getScale(proxy: geo))
-                                        .opacity(
-                                            getScale(proxy: geo) > 1 ? 1:0.9
-                                        )
+                        
+                        ScrollView(.horizontal){
+                            
+                            
+                            HStack{
+                                ForEach(0..<Cards.cards.count,id: \.self) { index in
+                                    GeometryReader { geo in
+                                        quickAccessView(imageName: Cards.cards[index].image, label:  Cards.cards[index].lable)
+                                            .scaleEffect(getScale(proxy: geo))
+                                            .opacity(
+                                                getScale(proxy: geo) > 1 ? 1:0.9
+                                            )
+                                        
+                                        
+                                    }
+                                    
+                                    .frame(width: 190)
+                                    .frame(minHeight: 0, maxHeight: .infinity)
                                     
                                     
-                                }
+                                }.padding()
+                            }
+                            
+                        }.scrollIndicators(.hidden)
+                        
+                    }.frame(height: 150)
+                        .padding(.bottom,10)
+                    //
+                    ZStack(alignment:.leading){
+                        
+                        HStack {
+                            if(searchTerm.isEmpty) {
+                                Text("Search patinas...")
+                                    .foregroundColor(.white.opacity(0.3))
+                            }
+                            Spacer()
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.white.opacity(0.3))
+                            
+                        }.padding()
+                        
+                        TextField("Search patinas...", text: $searchTerm)
+                            .padding()
+                            .foregroundColor(.white.opacity(0.5))
+                            .background(.opacity(0.2))
+                            .cornerRadius(13)
+                    } .padding(.bottom,10)
+                    
+                    
+                    
+                    
+                    HStack(){
+                        Text("Appointments")
+                            .font(Font.custom("Poppins-SemiBold", size: 20))
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button {
+                            onlyDone.toggle()
+                            
+                        } label: {
+                            Image("filter")
+                                .resizable()
+                            
+                                .frame(width:20,height:20)
+                                .padding(10)
+                                .background(Color(red: 0.050980392156862744, green: 0.047058823529411764, blue: 0.058823529411764705))
+                                .clipShape(Circle())
                                 
-                                .frame(width: 140)
-                                .frame(minHeight: 0, maxHeight: .infinity)
-                                
-                                
-                            }.padding()
                         }
                         
-                    }.scrollIndicators(.hidden)
+                        
+                    }
                     
-                }.frame(height: 260)
-                
-                
-                
-                HStack{
-                    Text("Upcoming appointments")
-                        .fontWeight(.bold)
-                        .font(.system(size: 18))
-                        .foregroundColor(Color(red: 0.1803921568627451, green: 0.20784313725490197, blue: 0.4))
-                    Spacer()
-                    Text("See all")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+                    
+                    
+                    
                 }
-                let imageData = try! Data(contentsOf: Bundle.main.url(forResource: "logo-animation", withExtension: "gif")!)
-                let gifImage = UIImage.gif(data: data!)
-                imageView.image = gifImage
                 
                 if(viewModel.appointments.count != 0 ){
-                   
+                    
                     List {
-                        VStack {
-                        ForEach(viewModel.appointments.sorted(), id: \.id) { appointment in
+                        let appointments = viewModel.appointments.sort()
+                        if(onlyDone) {
+                            let appointments = viewModel.appointments.filter { !$0.isDone }
                             
-                          
+                        }
+                        
+                        ForEach(appointments, id: \.id) { appointment in
+                            
+                            HStack(alignment: .top,spacing: 0){
+                                
+                                let currentTime = appointment.time.split(separator: ":").first! + ":00"
+                                
+                                
+                                if !viewModel.isSameTime(time:String(currentTime)) {
+                                    Text(currentTime)
+                                        .font(Font.custom("Poppins-SemiBold", size: 16))
+                                        .foregroundColor(.white)
+                                        .frame(width: 50, alignment: .leading)
+                                    
+                                }
+                                else{
+                                    Text(appointment.time)
+                                        .font(Font.custom("Poppins-SemiBold", size: 16))
+                                        .foregroundColor(.white)
+                                        .frame(width: 60, alignment: .leading)
+                                }
+                                
+                                
+                                
+                                Spacer()
                                 
                                 cardView(app: appointment)
-                                    .padding(.vertical,15)
-                                    
+                                    .listRowInsets(EdgeInsets())
+                                    .padding(.bottom,15)
+                                
                                     .onTapGesture {
                                         index = appointment.id
                                         currentAppointment = appointment
-                                        printIndex(id:appointment.id)
                                         withAnimation {
                                             let impactHeavy = UIImpactFeedbackGenerator(style: .medium)
                                             impactHeavy.impactOccurred()
                                             isShowAppointmentDetails.toggle()
                                         }
-                                        
-                                        
-                                       
                                     }
-                                    
+                                
                             }
-                            .listRowBackground(Color.clear)
-
                             
-                        } .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets())
-                            .padding(5)
-                            .animation(.easeInOut)
-                            .listRowBackground(Color.clear)
                             
-
+                            
+                        }
+                        
+                        
+                        
+                        
+                        
+                        .listRowBackground(Color.clear)
+                        
+                        
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets())
+                        .padding(5)
+                        .animation(.easeInOut)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .scrollContentBackground(.hidden)
+                        
                         
                     }
-//                    .refreshable {
-//                        isRefreshing = true
-//                      await Task.sleep(2_000_000_000)
-//                        isRefreshing = false
-//                    }.onAppear {
-//                      UIRefreshControl.appearance().tintColor = UIColor.clear
-//                      UIRefreshControl.appearance().backgroundColor = .green.withAlphaComponent(0)
-//
-//                    }
-//                    .onDisappear{
-//                        isRefreshing = false
-//                    }
-                    .listStyle(PlainListStyle())
+                    //MARK: style the list here
                     .listRowSeparator(.hidden)
+                    
+                    .padding(0)
+                    .listStyle(PlainListStyle())
+                    .scrollContentBackground(.hidden)
+                    
                     
                     
                     
@@ -337,54 +443,39 @@ struct homeView: View {
                 }
                 
                 
-                
-                Button(action: { self.isShowingSquareCamera.toggle() }) {
-                    ZStack{
-                        Text("+")
-                            .offset(x:8,y: -10)
-                        Image(systemName: "doc.viewfinder.fill")
-                    }.font(.system(size: 20))
-                }
-                .frame(width: 60,height: 60)
-                .background(Color(red: 0.3843137254901961, green: 0.48627450980392156, blue: 0.8823529411764706))
-                .clipShape(Circle())
-                .foregroundColor(.white)
-                .shadow(radius: 5)
-                .sheet(isPresented: $isShowingSquareCamera) {
-                    
-                    SquareCameraWrapperView()
-                        .padding()
-                        .presentationDetents([.large])
-                        .presentationDragIndicator(.visible)
-                        .ignoresSafeArea(.keyboard)
-                    
-                }
-                
             }.frame(maxWidth:.infinity)
-                .ignoresSafeArea(edges: .bottom)
-                .padding(.horizontal)
+                .padding()
                 .blur(radius: isShowAppointmentDetails ? 1 : 0 )
-                
-                
-                
-                
+            
+            
+            
+            BottomBar()
+                .edgesIgnoringSafeArea(.all)
             
             if(isShowAppointmentDetails){
                 Color(.black).opacity(isShowAppointmentDetails ? 0.59 : 0)
                 
-                    AppointmentDetailsView(id:currentAppointment,ShowDetails: $isShowAppointmentDetails)
-                        .transition(.move(edge: .bottom))
-                        .animation(.spring())
-                        .zIndex(3)
+                AppointmentDetailsView(id:currentAppointment,ShowDetails: $isShowAppointmentDetails)
+                    .transition(.move(edge: .bottom))
+                    .animation(.spring())
+                    .zIndex(3)
                 
             }
-                 
-        }.edgesIgnoringSafeArea(.all)
             
-            
+        }
+        
+        
+        
+        
+        
         
         
     }
+    
+    func isSameTime(time: String) -> Bool {
+        return lastHour == time
+    }
+    
     func printIndex(id:String){
         print(id)
     }
@@ -398,6 +489,8 @@ struct homeView: View {
         }
         return scale
     }
+    
+    
 }
 
 
@@ -407,6 +500,7 @@ extension View {
         return self.offset(x: 0, y: offset * 10)
     }
 }
+
 
 
 
@@ -558,7 +652,7 @@ struct Cards {
     let image: String
     let lable: String
     
-    static let cards = [Cards(image: "doc.text.magnifyingglass", lable: "Requests"),Cards(image: "person", lable: "Patients"),Cards(image: "doc.viewfinder", lable: "Scans")]
+    static let cards = [Cards(image: "scans-quick-action", lable: "Scans"),Cards(image: "patients-quick-action", lable: "Patients"),Cards(image: "doc.viewfinder", lable: "Scans")]
 }
 
 struct quickAccessView: View {
@@ -569,22 +663,30 @@ struct quickAccessView: View {
             Button {
                 
             } label: {
-                VStack{
-                    Image(systemName: imageName)
-                        .padding()
-                        .background(Color(red: 0.4392156862745098, green: 0.5372549019607843, blue: 0.8941176470588236))
-                        .clipShape(Circle())
-                        .font(.system(size: 18))
-                        .fontWeight(.medium)
+                HStack(alignment:.top){
                     
                     Text(label)
-                        .font(Font.custom("Gilroy-Bold", size: 16))
-                }.frame(width: 170,height: 170)
+                        .font(Font.custom("Poppins-SemiBold", size: 20))
+                    Spacer()
+                    
+                }.padding()
+                    .frame(width: 190,height: 125,alignment: .top)
+                
+                    .overlay(content: {
+                        Image(imageName)
+                            .resizable()
+                            .aspectRatio( contentMode: .fit)
+                            .frame(width: 190,height: 125)
+                            .offset(x:15,y:15)
+                    })
+                
+                
+                
             }
             
             
-        }.frame(width: 170,height: 170)
-            .background(Color(red: 0.3843137254901961, green: 0.48627450980392156, blue: 0.8823529411764706))
+        }.frame(width: 190,height: 125)
+            .background(.white.opacity(0.1))
             .foregroundColor(.white)
             .cornerRadius(8)
             .shadow(radius: 5)
@@ -593,223 +695,8 @@ struct quickAccessView: View {
     }
 }
 
-struct uploadScanView: View {
-    @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var selectedImageData: Data? = nil
-    @State private var uiImage = UIImage()
-    @State private var result = 0
-    @State private var DetailsText = ""
-    
-    var body: some View {
-        if(selectedImageData == nil) {
-            
-            GeometryReader { geometry in
-                HStack() {
-                    VStack(spacing:10){
-                        Image(systemName: "camera.fill")
-                            .resizable()
-                            .aspectRatio( contentMode: .fill)
-                            .frame(width: 20,height: 20)
-                        Text("Scan Now")
-                        
-                        
-                        
-                    }.frame(width: geometry.size.width/2.1,height: 150)
-                        .foregroundColor(.black)
-                        .background(Color(hue: 1.0, saturation: 0.0, brightness: 0.884))
-                        .cornerRadius(12)
-                        .shadow(radius: 7)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 1.5).fill(.black)
-                            
-                        )
-                        .padding(.trailing)
-                    
-                    
-                    PhotosPicker(
-                        selection: $selectedItem,
-                        matching: .images,
-                        photoLibrary: .shared()) {
-                            VStack(spacing:10){
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .aspectRatio( contentMode: .fill)
-                                    .frame(width: 20,height: 20)
-                                Text("Upload Scan")
-                                
-                                
-                                
-                                
-                            }.frame(width: geometry.size.width/2.1,height: 150)
-                                .foregroundColor(.black)
-                                .background(Color(hue: 1.0, saturation: 0.0, brightness: 0.884))
-                                .cornerRadius(12)
-                                .shadow(radius: 7)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 1.5).fill(.black)
-                                    
-                                )
-                            
-                            
-                        }.onChange(of: selectedItem) { newItem in
-                            Task {
-                                // Retrive selected asset in the form of Data
-                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                    selectedImageData = data
-                                    if let selectedImageData,let uiImage = UIImage(data: selectedImageData) {
-                                        self.uiImage = uiImage
-                                    }
-                                }
-                            }
-                        }
-                }
-            }.frame(height: 150)
-            
-        }
-        if let selectedImageData,
-           let uiImage = UIImage(data: selectedImageData) {
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity,maxHeight: 150)
-                .clipped()
-                .cornerRadius(12)
-            
-        }
-        TextField("Details", text: $DetailsText)
-            .frame(height: 75,alignment: .top)
-            .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 12).stroke(lineWidth: 1.5).fill(.gray)
-            )
-            .padding([.top,.bottom])
-            .ignoresSafeArea(.keyboard)
-        
-        
-        
-        
-        Button {
-            classifyImage()
-            result =  classifyImage()
-        } label: {
-            Text("Save Scan")
-                .frame(height: 40)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .fontWeight(.bold)
-                .font(.system(size: 20))
-        }
-        .frame(maxWidth: .infinity)
-        .foregroundColor(.white)
-        .background(Color(hue: 0.402, saturation: 0.666, brightness: 0.647))
-        .cornerRadius(18)
-        .shadow(radius: /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
-        
-        
-        
-        
-        
-    }
-    
-    private func classifyImage() -> Int {
-        var result = 0
-        do{
-            
-            
-            let multiArray = try? convertToMultiArray(uiImage)
-            print(uiImage)
-            
-            let config = MLModelConfiguration()
-            let model = try BreastCancerDetection(configuration:config)
-            let prediction = try model.prediction(conv2d_input: multiArray!)
-            print("\(prediction.Identity[0].doubleValue * 100.0)")
-            result =  Int(prediction.Identity[0].doubleValue * 100.0)
-        }
-        catch{
-            
-        }
-        
-        return result
-    }
-    func convertToMultiArray(_ image: UIImage) -> MLMultiArray? {
-        guard let cgImage = image.cgImage else {
-            return nil
-        }
-        
-        let width = cgImage.width
-        let height = cgImage.height
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
-        let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * 4, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)!
-        let rect = CGRect(x: 0, y: 0, width: width, height: height)
-        context.draw(cgImage, in: rect)
-        
-        guard let pixelBuffer = context.data else {
-            return nil
-        }
-        
-        // Change the shape of multiArray to [1, 50, 50, 3]
-        let multiArray = try? MLMultiArray(shape: [1, 50, 50, 3], dataType: MLMultiArrayDataType.float32)
-        
-        let dataPointer = multiArray?.dataPointer.bindMemory(to: Float.self, capacity: width * height * 3)
-        let pixelBufferPointer = pixelBuffer.bindMemory(to: UInt8.self, capacity: width * height * 4)
-        
-        // Resize the image to 50 x 50
-        let resizedImage = resizeImage(image: uiImage, targetSize: CGSize(width: 50, height: 50))
-        let resizedCgImage = resizedImage.cgImage
-        
-        for y in 0..<50 {
-            for x in 0..<50 {
-                for c in 0..<3 {
-                    let offset = y * 50 * 4 + x * 4 + c
-                    dataPointer?[y * 50 * 3 + x * 3 + c] = Float(pixelBufferPointer[offset]) / 255.0
-                }
-            }
-        }
-        return multiArray
-    }
-    
-    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
-        let size = image.size
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
-        let newSize = widthRatio > heightRatio ?  CGSize(width: size.width * heightRatio, height: size.height * heightRatio) : CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-        
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        image.draw(in: rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage!
-    }
-    
-    
-    
-    
-    func pixelBuffer(forImage image: UIImage) -> CVPixelBuffer? {
-        let width = Int(image.size.width)
-        let height = Int(image.size.height)
-        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue, kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
-        var pixelBuffer: CVPixelBuffer?
-        let status = CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
-        guard status == kCVReturnSuccess else {
-            return nil
-        }
-        
-        CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
-        let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer!)
-        
-        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-        let context = CGContext(data: pixelData, width: width, height: height, bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
-        
-        context?.draw(image.cgImage!, in: CGRect(x: 0, y: 0, width: width, height: height))
-        
-        CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
-        
-        return pixelBuffer
-    }
-}
+
+
 
 
 

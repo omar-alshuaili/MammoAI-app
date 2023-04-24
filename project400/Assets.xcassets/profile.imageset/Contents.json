@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "IMG_1727_jpg.JPG",
+      "filename" : "photo-1570612861542-284f4c12e75f.jpeg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "photo-1570612861542-284f4c12e75f 1.jpeg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "photo-1570612861542-284f4c12e75f 2.jpeg",
       "idiom" : "universal",
       "scale" : "3x"
     }

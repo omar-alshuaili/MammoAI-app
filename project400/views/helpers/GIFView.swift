@@ -1,13 +1,4 @@
-//
-//  GIFView.swift
-//  project400
-//
-//  Created by Omar Alshuaili on 05/02/2023.
-//
-
 import SwiftUI
-import FLAnimatedImage
-import Foundation
 import FLAnimatedImage
 
 enum URLType {
@@ -34,8 +25,6 @@ struct GIFView: UIViewRepresentable {
   private let imageView: FLAnimatedImageView = {
     let imageView = FLAnimatedImageView()
     imageView.translatesAutoresizingMaskIntoConstraints = false
-    imageView.layer.cornerRadius = 24
-    imageView.layer.masksToBounds = true
     return imageView
   }()
 
