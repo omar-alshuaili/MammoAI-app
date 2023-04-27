@@ -11,7 +11,7 @@ struct cardView: View {
     let app : Appointment
     @State private var show : Bool = false
     @Namespace var namespace
-    @State private var isCompleted : Bool = false
+    @EnvironmentObject var viewModel : AppointmentViewModel
     var body: some View {
         
         ZStack{
@@ -68,20 +68,22 @@ struct cardView: View {
                     ZStack{
                        
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(isCompleted ?
+                            .fill(app.isDone ?
                                   Color(red: 0.34901960784313724, green: 0.8549019607843137, blue: 0.43529411764705883) :
                                     Color(red: 0.23921568627450981, green: 0.23529411764705882, blue: 0.2549019607843137) )
                             .frame(width: 45,height: 45)
-                            .onTapGesture {
-                                isCompleted.toggle()
-                            }
+                            
                         
                         
                         Image(systemName: "checkmark")
                             .resizable()
                             .frame(width: 19, height: 19)
-                            .opacity(isCompleted ? 1 : 0)
+                            .opacity(app.isDone ? 1 : 0)
                             .foregroundColor( .white)
+                            
+                    }.onTapGesture {
+                        
+                        viewModel.toggleDone(item: app)
                     }
                     
                     

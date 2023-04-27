@@ -71,112 +71,10 @@ class SquareCameraViewController: UIViewController, AVCaptureVideoDataOutputSamp
     
 }
 
-struct SquareCameraWrapperView: View {
-    @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var selectedImageData: Data? = nil
-    @State private var result = 0
-    @State private var uiImage = UIImage()
-    @State private var classificationLabel: String = ""
-    @State var text: String = ""
-    @State var opacity: Double = 0
-    @State var scaleEffect: Double = 0.5
-    @State private var isEditing = false
-    @State private var showAddNewPatient = false
-    
-    var body: some View {
-        ZStack{
-            
-            
-            HStack(alignment:.top) {
-                VStack(alignment: .leading){
-                    Text("Add new scan")
-                        .fontWeight(.bold)
-                        .font(.system(size: 30))
-                        .fontWeight(.bold)
-                        .padding(.top,25)
-                    HStack {
-                        ZStack {
-                            TextField("Search for patient", text: $text)
-                                .frame(height: 70)
-                                .foregroundColor(.gray)
-                                .fontWeight(.medium)
-                                .padding(.horizontal)
-                                .font(.system(size: 18))
-                                .overlay(RoundedRectangle(cornerRadius: 12).stroke(.gray,lineWidth: 1))
-                            
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
-                                .offset(x:-UIScreen.main.bounds.width + 200)
-                        }
-
-                    }
-                    ZStack{
-                        Divider()
-                        Text("OR")
-                            .padding(.horizontal)
-                            .background(.white)
-                        
-                        
-                        
-                    }.padding()
-                    
-                    Button {
-                        showAddNewPatient.toggle()
-                        
-                    } label: {
-                        Text("Add new Patient")
-                            .frame(height: 40)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .fontWeight(.bold)
-                            .font(.system(size: 20))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .foregroundColor(.white)
-                    .background(.black)
-                    .cornerRadius(18)
-                    .sheet(isPresented: $showAddNewPatient ){
-                        AddNewPatient()
-                            .presentationDetents([.large])
-                            .presentationDragIndicator(.visible)
-                    }
-                    .padding(.bottom)
-                    
-                    uploadScanView()
-                    
-                    
-                }
-                
-            }.frame(minHeight: .infinity)
-            
-            
-            
-            
-        }.ignoresSafeArea(.keyboard)
-        
-    }
-    private func isEmpty(text:String) -> Bool {
-        return text.isEmpty
-    }
-    
-}
-
-
-struct SquareCameraUIViewRepresentable: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        return SquareCameraViewController().view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {
-    }
-    
-    
-    
-}
 
 
 struct homeView: View {
-    @State private var isShowingScanner = false
+    @State private var isShowingScanner = true
     @State var isShowAppointmentDetails = false
     @State var isShowing = false
     @State var offset : CGSize = .zero
@@ -188,7 +86,6 @@ struct homeView: View {
     @State var isRefreshing = false
     @State var isShowingFullList = false
     @State var searchTerm = ""
-    @State var onlyDone : Bool = false
     var lastHour: String? = nil
     
     var body: some View {
@@ -319,17 +216,11 @@ struct homeView: View {
                             .foregroundColor(.white)
                         Spacer()
                         Button {
-                            onlyDone.toggle()
                             
                         } label: {
                             Image("filter")
                                 .resizable()
-                            
-                                .frame(width:20,height:20)
-                                .padding(10)
-                                .background(Color(red: 0.050980392156862744, green: 0.047058823529411764, blue: 0.058823529411764705))
-                                .clipShape(Circle())
-                                
+                                .frame(width:25,height:25)
                         }
                         
                         
@@ -343,13 +234,8 @@ struct homeView: View {
                 if(viewModel.appointments.count != 0 ){
                     
                     List {
-                        let appointments = viewModel.appointments.sort()
-                        if(onlyDone) {
-                            let appointments = viewModel.appointments.filter { !$0.isDone }
-                            
-                        }
                         
-                        ForEach(appointments, id: \.id) { appointment in
+                        ForEach(viewModel.appointments.sorted(), id: \.id) { appointment in
                             
                             HStack(alignment: .top,spacing: 0){
                                 
@@ -449,8 +335,8 @@ struct homeView: View {
             
             
             
-            BottomBar()
-                .edgesIgnoringSafeArea(.all)
+            
+                
             
             if(isShowAppointmentDetails){
                 Color(.black).opacity(isShowAppointmentDetails ? 0.59 : 0)

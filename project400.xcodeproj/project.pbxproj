@@ -16,9 +16,7 @@
 		9C0C6DCB29A347EE00C943E6 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9C0C6DCA29A347EE00C943E6 /* FirebaseAuth */; };
 		9C0C6DCD29A347EE00C943E6 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 9C0C6DCC29A347EE00C943E6 /* FirebaseFirestore */; };
 		9C0C6DCF29A347EE00C943E6 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9C0C6DCE29A347EE00C943E6 /* FirebaseStorage */; };
-		9C1EDDFD2948D8BD0032287B /* scanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1EDDFC2948D8BD0032287B /* scanView.swift */; };
 		9C1EDE002948F4810032287B /* ScanData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1EDDFF2948F4810032287B /* ScanData.swift */; };
-		9C1EDE0229490BCD0032287B /* StoreXray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C1EDE0129490BCD0032287B /* StoreXray.swift */; };
 		9C25FC5E298F981800DDF62E /* testView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C25FC5D298F981800DDF62E /* testView.swift */; };
 		9C25FC66298FB60C00DDF62E /* GIFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C25FC65298FB60C00DDF62E /* GIFView.swift */; };
 		9C2DE6B129418BD3009CC5A4 /* project400App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C2DE6B029418BD3009CC5A4 /* project400App.swift */; };
@@ -43,6 +41,14 @@
 		9CDB31962946F9A900265E59 /* Gilroy-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CDB31902946F96300265E59 /* Gilroy-Black.ttf */; };
 		9CDB31972946F9A900265E59 /* Gilroy-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CDB318E2946F96300265E59 /* Gilroy-ExtraBold.ttf */; };
 		9CDB319A294708F200265E59 /* homeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDB3199294708F200265E59 /* homeView.swift */; };
+		9CE48AE929F8156400F33943 /* mainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AE829F8156400F33943 /* mainView.swift */; };
+		9CE48AEB29F81BB300F33943 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AEA29F81BB300F33943 /* CalendarView.swift */; };
+		9CE48AEF29F81BDA00F33943 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AEE29F81BDA00F33943 /* ProfileView.swift */; };
+		9CE48AF129F81BEB00F33943 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AF029F81BEB00F33943 /* ScanView.swift */; };
+		9CE48AF329F81FF900F33943 /* NewPatientViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AF229F81FF900F33943 /* NewPatientViewModel.swift */; };
+		9CE48AF529F82A2A00F33943 /* PatientModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AF429F82A2A00F33943 /* PatientModel.swift */; };
+		9CE48AF729F83E3000F33943 /* ScanCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AF629F83E3000F33943 /* ScanCoreData.swift */; };
+		9CE48B0429F8691600F33943 /* MyScan.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48B0229F8691600F33943 /* MyScan.xcdatamodeld */; };
 		9CE94F3729967F5E00E67B43 /* CoreMLModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE94F3629967F5E00E67B43 /* CoreMLModel.swift */; };
 		9CE94F392998313A00E67B43 /* uploadScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE94F382998313A00E67B43 /* uploadScanView.swift */; };
 		9CF14BFD2942932300DC3A99 /* loginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF14BFC2942932300DC3A99 /* loginViewModel.swift */; };
@@ -65,9 +71,7 @@
 		9C0C6DC129A3224500C943E6 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		9C0C6DC229A3224700C943E6 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		9C0C6DC329A3224700C943E6 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
-		9C1EDDFC2948D8BD0032287B /* scanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = scanView.swift; sourceTree = "<group>"; };
 		9C1EDDFF2948F4810032287B /* ScanData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanData.swift; sourceTree = "<group>"; };
-		9C1EDE0129490BCD0032287B /* StoreXray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreXray.swift; sourceTree = "<group>"; };
 		9C25FC5D298F981800DDF62E /* testView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testView.swift; sourceTree = "<group>"; };
 		9C25FC65298FB60C00DDF62E /* GIFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GIFView.swift; sourceTree = "<group>"; };
 		9C2DE6AD29418BD3009CC5A4 /* MammoAi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MammoAi.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +98,14 @@
 		9CDB318F2946F96300265E59 /* Gilroy-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-SemiBold.ttf"; sourceTree = "<group>"; };
 		9CDB31902946F96300265E59 /* Gilroy-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Black.ttf"; sourceTree = "<group>"; };
 		9CDB3199294708F200265E59 /* homeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homeView.swift; sourceTree = "<group>"; };
+		9CE48AE829F8156400F33943 /* mainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainView.swift; sourceTree = "<group>"; };
+		9CE48AEA29F81BB300F33943 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		9CE48AEE29F81BDA00F33943 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		9CE48AF029F81BEB00F33943 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
+		9CE48AF229F81FF900F33943 /* NewPatientViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPatientViewModel.swift; sourceTree = "<group>"; };
+		9CE48AF429F82A2A00F33943 /* PatientModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientModel.swift; sourceTree = "<group>"; };
+		9CE48AF629F83E3000F33943 /* ScanCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanCoreData.swift; sourceTree = "<group>"; };
+		9CE48B0329F8691600F33943 /* MyScan.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyScan.xcdatamodel; sourceTree = "<group>"; };
 		9CE94F3629967F5E00E67B43 /* CoreMLModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLModel.swift; sourceTree = "<group>"; };
 		9CE94F382998313A00E67B43 /* uploadScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = uploadScanView.swift; sourceTree = "<group>"; };
 		9CF14BFC2942932300DC3A99 /* loginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginViewModel.swift; sourceTree = "<group>"; };
@@ -143,6 +155,7 @@
 				9C3F606D297AFFD20025125F /* appointmentModel.swift */,
 				9C9378422984378A006D5883 /* camera.swift */,
 				9CE94F3629967F5E00E67B43 /* CoreMLModel.swift */,
+				9CE48AF429F82A2A00F33943 /* PatientModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -211,6 +224,7 @@
 				9C2DE6B629418BD6009CC5A4 /* Preview Content */,
 				9CF14BFE2942B7CA00DC3A99 /* KeyBoardHandler.swift */,
 				9CFD1C332991640800877F57 /* data.json */,
+				9CE48B0229F8691600F33943 /* MyScan.xcdatamodeld */,
 			);
 			path = project400;
 			sourceTree = "<group>";
@@ -231,7 +245,6 @@
 				9CF14C1A29433BAA00DC3A99 /* loginViews */,
 				9C2DE6C129418C67009CC5A4 /* startPage.swift */,
 				9CF14C162942F6AB00DC3A99 /* signupView.swift */,
-				9C1EDDFC2948D8BD0032287B /* scanView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -254,6 +267,10 @@
 				9C050A96298AFF9200D7A5DD /* AddNewPatient.swift */,
 				9C771F6D298CB43A00752F97 /* AppointmentDetailsView.swift */,
 				9CE94F382998313A00E67B43 /* uploadScanView.swift */,
+				9CE48AE829F8156400F33943 /* mainView.swift */,
+				9CE48AEA29F81BB300F33943 /* CalendarView.swift */,
+				9CE48AEE29F81BDA00F33943 /* ProfileView.swift */,
+				9CE48AF029F81BEB00F33943 /* ScanView.swift */,
 			);
 			path = homeView;
 			sourceTree = "<group>";
@@ -264,8 +281,9 @@
 				9CF14BFC2942932300DC3A99 /* loginViewModel.swift */,
 				9CF14C18294317E200DC3A99 /* SignUpViewModel.swift */,
 				9CF14C1F2944E2D300DC3A99 /* otpViewModel.swift */,
-				9C1EDE0129490BCD0032287B /* StoreXray.swift */,
 				9CC90F14297DA1DD008A53DA /* AppointmentViewModel.swift */,
+				9CE48AF229F81FF900F33943 /* NewPatientViewModel.swift */,
+				9CE48AF629F83E3000F33943 /* ScanCoreData.swift */,
 			);
 			path = viewModel;
 			sourceTree = "<group>";
@@ -384,13 +402,14 @@
 			files = (
 				9C2DE6B329418BD3009CC5A4 /* ContentView.swift in Sources */,
 				9C25FC66298FB60C00DDF62E /* GIFView.swift in Sources */,
-				9C1EDDFD2948D8BD0032287B /* scanView.swift in Sources */,
 				9C937855298474E5006D5883 /* BreastCancerDetection.mlmodel in Sources */,
 				9C2DE6C229418C67009CC5A4 /* startPage.swift in Sources */,
-				9C1EDE0229490BCD0032287B /* StoreXray.swift in Sources */,
+				9CE48AF129F81BEB00F33943 /* ScanView.swift in Sources */,
 				9CE94F3729967F5E00E67B43 /* CoreMLModel.swift in Sources */,
+				9CE48AEB29F81BB300F33943 /* CalendarView.swift in Sources */,
 				9CF14C202944E2D300DC3A99 /* otpViewModel.swift in Sources */,
 				9C25FC5E298F981800DDF62E /* testView.swift in Sources */,
+				9CE48AE929F8156400F33943 /* mainView.swift in Sources */,
 				9C3F606E297AFFD20025125F /* appointmentModel.swift in Sources */,
 				9CF14C19294317E200DC3A99 /* SignUpViewModel.swift in Sources */,
 				9C2DE6C029418C11009CC5A4 /* loginView.swift in Sources */,
@@ -398,17 +417,22 @@
 				9CF14BFF2942B7CA00DC3A99 /* KeyBoardHandler.swift in Sources */,
 				9C9378432984378A006D5883 /* camera.swift in Sources */,
 				9CC90F15297DA1DD008A53DA /* AppointmentViewModel.swift in Sources */,
+				9CE48B0429F8691600F33943 /* MyScan.xcdatamodeld in Sources */,
 				9CE94F392998313A00E67B43 /* uploadScanView.swift in Sources */,
 				9CF14BFD2942932300DC3A99 /* loginViewModel.swift in Sources */,
 				9CDB319A294708F200265E59 /* homeView.swift in Sources */,
 				9CF14C1C29433BDD00DC3A99 /* otpView.swift in Sources */,
+				9CE48AEF29F81BDA00F33943 /* ProfileView.swift in Sources */,
 				9C059D5629B6ABCD00D2A937 /* BottomBar.swift in Sources */,
 				9C2DE6B129418BD3009CC5A4 /* project400App.swift in Sources */,
 				9CF14C172942F6AB00DC3A99 /* signupView.swift in Sources */,
 				9C771F6C298C99D200752F97 /* loading.swift in Sources */,
 				9C3F6070297B08FD0025125F /* cardView.swift in Sources */,
+				9CE48AF729F83E3000F33943 /* ScanCoreData.swift in Sources */,
 				9C050A97298AFF9200D7A5DD /* AddNewPatient.swift in Sources */,
 				9C1EDE002948F4810032287B /* ScanData.swift in Sources */,
+				9CE48AF329F81FF900F33943 /* NewPatientViewModel.swift in Sources */,
+				9CE48AF529F82A2A00F33943 /* PatientModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -673,6 +697,19 @@
 			productName = FLAnimatedImage;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		9CE48B0229F8691600F33943 /* MyScan.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				9CE48B0329F8691600F33943 /* MyScan.xcdatamodel */,
+			);
+			currentVersion = 9CE48B0329F8691600F33943 /* MyScan.xcdatamodel */;
+			path = MyScan.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9C2DE6A529418BD3009CC5A4 /* Project object */;
 }

@@ -9,17 +9,31 @@ import SwiftUI
 
 struct AddNewPatient: View {
     @FocusState var isInputActive: Bool
+        
+        // Add this line to create an instance of the view model
+        @StateObject private var viewModel = NewPatientViewModel()
+        
+        // Replace this with the doctor's ID
+        @AppStorage("user_id") private var doctorId: String = ""
+
+        
+        // Add these state properties to hold the patient's data
+        @State private var avatar: Int = 0
+        @State private var name: String = ""
+        @State private var age: String = ""
+        @State private var phone: String = ""
+    
     var body: some View {
         
         HStack {
             VStack(alignment: .leading,spacing: 20){
-                avatarSelection()
-                PatientName()
-                PatientAge()
-                PatientPhone()
+                avatarSelection(avatar: $avatar)
+                            PatientName(name: $name)
+                            PatientAge(age: $age)
+                            PatientPhone(phone: $phone)
                 
                 Button {
-                    
+                    viewModel.addPatient(doctorId: doctorId, avatar: avatar, name: name, age: age, phone: phone)
                 } label: {
                     Text("Save")
                         .frame(height: 50)
@@ -59,6 +73,7 @@ struct AddNewPatient_Previews: PreviewProvider {
 
 struct avatarSelection: View {
     @State private var selectedImage :Int =  0
+    @Binding var avatar: Int
     var body: some View {
         VStack(alignment: .leading) {
             
@@ -71,6 +86,7 @@ struct avatarSelection: View {
                         ForEach(0..<6) { index in
                             Button{
                                 selectedImage = index
+                                avatar = index + 1
                             } label: {
                                 ZStack{
                                     Image( "avatar \(index+1)")
@@ -110,7 +126,7 @@ struct avatarSelection: View {
 }
 
 struct PatientName: View {
-    @State private var PatientName : String = ""
+    @Binding var name: String
     @FocusState private var isFocused: Bool
     var body: some View {
         VStack(alignment:.leading){
@@ -120,7 +136,7 @@ struct PatientName: View {
                 . onTapGesture {
                       self.hideKeyboard()
                 }
-            TextField("Enter Patient's Full Name" ,text: $PatientName)
+            TextField("Enter Patient's Full Name" ,text: $name)
                 .frame(height: 80)
                 .foregroundColor(.gray)
                 .fontWeight(.medium)
@@ -139,17 +155,17 @@ struct PatientName: View {
 
 
 struct PatientAge: View {
-    @State private var PatientAge : String = ""
+    @Binding var age: String
     @FocusState private var isFocused: Bool
     var body: some View {
         VStack(alignment:.leading){
-            Text("Patient's Phone Number")
+            Text("Patient's Age")
                 .font(.system(size: 25))
                 .fontWeight(.bold)
                 . onTapGesture {
                       self.hideKeyboard()
                 }
-            TextField("Enter Patient's Age" ,text: $PatientAge)
+            TextField("Enter Patient's Age" ,text: $age)
                 .keyboardType(.numberPad)
                 .frame(height: 80)
                 .foregroundColor(.gray)
@@ -169,7 +185,7 @@ struct PatientAge: View {
 
 
 struct PatientPhone: View {
-    @State private var PatientPhone : String = ""
+    @Binding var phone: String
     @FocusState private var isFocused: Bool
     var body: some View {
         VStack(alignment:.leading){
@@ -179,7 +195,7 @@ struct PatientPhone: View {
                 . onTapGesture {
                       self.hideKeyboard()
                 }
-            TextField("Enter Patient's Phone Number" ,text: $PatientPhone)
+            TextField("Enter Patient's Phone Number" ,text: $phone)
                 .keyboardType(.numberPad)
                 .frame(height: 80)
                 .foregroundColor(.gray)

@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if login_status {
-               homeView()
+               mainView()
             }
             else{
                 startPage()
