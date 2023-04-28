@@ -30,7 +30,7 @@ struct cardView: View {
                     
                     
                     VStack(alignment: .leading,spacing: 5){
-                        Text("\(app.name)")
+                        Text("\(app.patient!.name)")
                             .fontWeight(.medium)
                             .font(.system(size: 18))
                             .foregroundColor(.white)

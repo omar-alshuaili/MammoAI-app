@@ -41,6 +41,8 @@
 		9CDB31962946F9A900265E59 /* Gilroy-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CDB31902946F96300265E59 /* Gilroy-Black.ttf */; };
 		9CDB31972946F9A900265E59 /* Gilroy-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CDB318E2946F96300265E59 /* Gilroy-ExtraBold.ttf */; };
 		9CDB319A294708F200265E59 /* homeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CDB3199294708F200265E59 /* homeView.swift */; };
+		9CE30B0429FABA8700037EB4 /* EnvironmentKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE30B0329FABA8700037EB4 /* EnvironmentKeys.swift */; };
+		9CE30B0629FB743600037EB4 /* NewAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE30B0529FB743600037EB4 /* NewAppointmentView.swift */; };
 		9CE48AE929F8156400F33943 /* mainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AE829F8156400F33943 /* mainView.swift */; };
 		9CE48AEB29F81BB300F33943 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AEA29F81BB300F33943 /* CalendarView.swift */; };
 		9CE48AEF29F81BDA00F33943 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE48AEE29F81BDA00F33943 /* ProfileView.swift */; };
@@ -98,6 +100,8 @@
 		9CDB318F2946F96300265E59 /* Gilroy-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-SemiBold.ttf"; sourceTree = "<group>"; };
 		9CDB31902946F96300265E59 /* Gilroy-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Black.ttf"; sourceTree = "<group>"; };
 		9CDB3199294708F200265E59 /* homeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = homeView.swift; sourceTree = "<group>"; };
+		9CE30B0329FABA8700037EB4 /* EnvironmentKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentKeys.swift; sourceTree = "<group>"; };
+		9CE30B0529FB743600037EB4 /* NewAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAppointmentView.swift; sourceTree = "<group>"; };
 		9CE48AE829F8156400F33943 /* mainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainView.swift; sourceTree = "<group>"; };
 		9CE48AEA29F81BB300F33943 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		9CE48AEE29F81BDA00F33943 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -255,6 +259,7 @@
 				9C771F6B298C99D200752F97 /* loading.swift */,
 				9C25FC65298FB60C00DDF62E /* GIFView.swift */,
 				9C059D5529B6ABCD00D2A937 /* BottomBar.swift */,
+				9CE30B0329FABA8700037EB4 /* EnvironmentKeys.swift */,
 			);
 			path = helpers;
 			sourceTree = "<group>";
@@ -271,6 +276,7 @@
 				9CE48AEA29F81BB300F33943 /* CalendarView.swift */,
 				9CE48AEE29F81BDA00F33943 /* ProfileView.swift */,
 				9CE48AF029F81BEB00F33943 /* ScanView.swift */,
+				9CE30B0529FB743600037EB4 /* NewAppointmentView.swift */,
 			);
 			path = homeView;
 			sourceTree = "<group>";
@@ -405,6 +411,7 @@
 				9C937855298474E5006D5883 /* BreastCancerDetection.mlmodel in Sources */,
 				9C2DE6C229418C67009CC5A4 /* startPage.swift in Sources */,
 				9CE48AF129F81BEB00F33943 /* ScanView.swift in Sources */,
+				9CE30B0629FB743600037EB4 /* NewAppointmentView.swift in Sources */,
 				9CE94F3729967F5E00E67B43 /* CoreMLModel.swift in Sources */,
 				9CE48AEB29F81BB300F33943 /* CalendarView.swift in Sources */,
 				9CF14C202944E2D300DC3A99 /* otpViewModel.swift in Sources */,
@@ -433,6 +440,7 @@
 				9C1EDE002948F4810032287B /* ScanData.swift in Sources */,
 				9CE48AF329F81FF900F33943 /* NewPatientViewModel.swift in Sources */,
 				9CE48AF529F82A2A00F33943 /* PatientModel.swift in Sources */,
+				9CE30B0429FABA8700037EB4 /* EnvironmentKeys.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

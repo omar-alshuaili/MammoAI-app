@@ -8,16 +8,28 @@
 import SwiftUI
 
 struct mainView: View {
-    @State private var currentView: AnyView = AnyView(homeView())
+    @State var currentView: AnyView = AnyView(homeView())
+    @Environment(\.isBottomBarVisible) var isBottomBarVisible
+    @StateObject var viewModel = AppointmentViewModel()
     var body: some View {
         NavigationView {
-                   VStack {
-                       currentView
-                       Spacer()
-                       BottomBar(currentView: $currentView)
-                   }
-               }
-           }
+            ZStack {
+                VStack {
+                    currentView
+                    Spacer()
+                }
+                VStack {
+                    Spacer()
+                    if isBottomBarVisible {
+                        BottomBar(currentView: $currentView)
+                    }
+                }
+            }
+        }.environmentObject(viewModel)
+    }
+    func changeView<Content: View>(_ view: Content) {
+        currentView = AnyView(view)
+    }
 }
 
 struct mainView_Previews: PreviewProvider {

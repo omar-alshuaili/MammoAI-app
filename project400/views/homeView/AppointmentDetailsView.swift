@@ -17,6 +17,7 @@ struct AppointmentDetailsView: View {
     @State var drag: CGSize = .zero
     @State private var opacity: CGFloat = 0.1
     @State var currentImage = 0
+    let onDelete: () -> Void
     var images = [Image(systemName: "greaterthan"), Image(systemName: "greaterthan"), Image(systemName: "greaterthan")]
     
     var body: some View {
@@ -56,7 +57,7 @@ struct AppointmentDetailsView: View {
                 VStack {
                     VStack(alignment: .leading,spacing: 25){
                         HStack(alignment: .top) {
-                            Image("avatar 1")
+                            Image("avatar " + String(id.patient!.avatar))
                                 .resizable()
                                 .frame(width: 90,height: 90)
                             Spacer()
@@ -83,7 +84,7 @@ struct AppointmentDetailsView: View {
                         
                         VStack(alignment: .leading,spacing: 25){
                             HStack {
-                                Text("\(id.name)")
+                                Text("\(id.patient!.name)")
                                     .foregroundColor(.black)
                                     .fontWeight(.bold)
                                     .font(.system(size: 20))
@@ -138,24 +139,12 @@ struct AppointmentDetailsView: View {
                             
                             
                             VStack{
-                                Button {
-                                    
-                                } label: {
-                                    Text("Upload Doc").frame(height: 35)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .fontWeight(.bold)
-                                        .font(.system(size: 20))
-                                    
-                                }
-                                .frame(maxWidth: .infinity)
-                                .foregroundColor(.black)
-                                .overlay(RoundedRectangle(cornerRadius: 18).stroke(lineWidth: 1))
                                 
                                 ZStack{
                                     
                                     RoundedRectangle(cornerRadius: 18).stroke(lineWidth: 1)
                                         .frame(height:70)
+                                        .foregroundColor(.red)
                                     
                                     HStack {
                                         Image(systemName: "greaterthan")
@@ -206,7 +195,7 @@ struct AppointmentDetailsView: View {
                                         .padding()
                                         .padding(.horizontal)
                                         .frame(maxWidth: offset.width < 270 ? 80 : UIScreen.main.bounds.width * 0.88 )
-                                        .background(.black)
+                                        .background(Color(red: 0.050980392156862744, green: 0.047058823529411764, blue: 0.058823529411764705))
                                         .clipShape(RoundedRectangle(cornerRadius: 10))
                                         .offset(x: -UIScreen.main.bounds.width / 2 + 55 )
                                         .offset(x: offset.width > 270 ? offset.width - 120 : offset.width + 10 )
@@ -233,27 +222,23 @@ struct AppointmentDetailsView: View {
                                                     .onEnded {_ in
                                                         withAnimation(.spring()) {
                                                             if(offset.width >= 280){
-                                                                
                                                                 isDeleted = true
-                                                                AppointmentViewModel().delete(doc: id.id) {
-                                                                    offset = .zero
-                                                                    viewModel.appointments.remove(at: viewModel.appointments.firstIndex(of:id)!)
-                                                                    ShowDetails.toggle()
-                                                                    
+                                                                DispatchQueue.main.async {
+                                                                    AppointmentViewModel().delete(doc: id.id) {
+                                                                        offset = .zero
+                                                                        viewModel.appointments.remove(at: viewModel.appointments.firstIndex(of:id)!)
+                                                                        ShowDetails.toggle()
+                                                                        onDelete()
+                                                                        
+                                                                    }
                                                                 }
+                                                                
                                                                 
                                                             }
                                                             else{
-                                                                
                                                                 offset = .zero
                                                                 
-                                                                
                                                             }
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
                                                         }
                                                     }
                                                 
@@ -266,17 +251,11 @@ struct AppointmentDetailsView: View {
                                     
                                         .padding()
                                         .padding(.horizontal)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.green)
                                         .fontWeight(.black)
                                         .opacity(isDeleted && offset.width > 270 ? 1 : 0)
                                         .offset(x:10)
                                         .offset(x: isDeleted ? -10 : 0)
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
                                     
                                 }
                             }
@@ -286,7 +265,7 @@ struct AppointmentDetailsView: View {
                         .frame(maxWidth: .infinity,
                                maxHeight: UIScreen.main.bounds.height * 0.44 ,
                                alignment: .top)
-                        .background(.white)
+                        .background(Color(red: 0.09019607843137255, green: 0.08627450980392157, blue: 0.10588235294117647))
                         .cornerRadius(20)
                     
                 }
@@ -297,6 +276,7 @@ struct AppointmentDetailsView: View {
             }
             .offset(y: 5 )
             .offset(y: drag.height - 5)
+         
             
             
             
@@ -309,6 +289,7 @@ struct AppointmentDetailsView: View {
             
         }
         .frame(maxHeight: .infinity,alignment: .bottom)
+        
         .edgesIgnoringSafeArea(.bottom)
         
         
@@ -320,8 +301,8 @@ struct AppointmentDetailsView: View {
 }
 
 
-struct AppointmentDetailsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AppointmentDetailsView(id: Appointment.example,ShowDetails: .constant(true))
-    }
-}
+//struct AppointmentDetailsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AppointmentDetailsView(id: Appointment.example,ShowDetails: .constant(true), onDelete: <#() -> Void#>)
+//    }
+//}

@@ -5,6 +5,7 @@ import Combine
 class NewPatientViewModel: ObservableObject {
     private var db = Firestore.firestore()
     @Published var patient: Patient?
+    @Published var currentPatient: Patient?
     @Published var searchText = ""
     func addPatient(doctorId: String, avatar: Int, name: String, age: String, phone: String) {
         let newPatient: [String: Any] = [
@@ -24,31 +25,33 @@ class NewPatientViewModel: ObservableObject {
     }
     
     //function to fetch the patient by phone number
-     func searchPatientByPhoneNumber(phoneNumber: String) {
-            let db = Firestore.firestore()
-            @AppStorage("user_id")  var doctorId: String = ""
-
-         db.collection("doctors")
-             .document(doctorId)
-             .collection("patients")
-             .whereField("phone", isEqualTo: phoneNumber)
-                .getDocuments { (querySnapshot, error) in
-                    if let error = error {
-                        print("Error getting documents: \(error)")
+    func searchPatientByPhoneNumber(phoneNumber: String) {
+        
+        let db = Firestore.firestore()
+        @AppStorage("user_id")  var doctorId: String = ""
+        db.collection("doctors")
+            .document(doctorId)
+            .collection("patients")
+            .whereField("phone", isEqualTo: phoneNumber)
+            .getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                } else {
+                    if let document = querySnapshot?.documents.first {
+                        let patient = Patient(name: document["name"] as? String ?? "",
+                                              age: document["age"] as? String ?? "",
+                                              phoneNumber: document["phone"] as? String ?? "",
+                                              avatar: document["avatar"] as? Int ?? 1)
+                        self.currentPatient = patient
+                        
                     } else {
-                        if let document = querySnapshot?.documents.first, let patientData = document.data() as? [String: Any] {
-                            self.patient = Patient(dictionary: patientData)
-                            self.searchText = "" // clear search text
-                            print("\(self.patient)")
-                           
-                        } else {
-                            print("No patient found with the provided phone number.")
-                            print("Doctor ID: \(doctorId)")
-                            print("Phone Number: \(phoneNumber)")
-                        }
+                        print("No patient found with the provided phone number.")
+                        print("Doctor ID: \(doctorId)")
+                        print("Phone Number: \(phoneNumber)")
                     }
                 }
-        }
+            }
+    }
     
     
     

@@ -1,24 +1,15 @@
-//
-//  ScanCoreData.swift
-//  project400
-//
-//  Created by Omar Alshuaili on 25/04/2023.
-//
-
 import Foundation
 import CoreData
 
+class ScanCoreData: ObservableObject {
+    @Published private(set) var container: NSPersistentContainer
 
-public class ScanCoreData: ObservableObject {
-
-    let container = NSPersistentContainer(name: "MyScan")
-    
-    init(){
-        container.loadPersistentStores { des, error in
+    init() {
+        container = NSPersistentContainer(name: "MyScan")
+        container.loadPersistentStores { description, error in
             if let error = error {
                 print("\(error.localizedDescription)")
             }
         }
     }
-
 }

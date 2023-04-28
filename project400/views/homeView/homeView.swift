@@ -85,10 +85,12 @@ struct homeView: View {
     @State private var currentAppointment : Appointment = Appointment.example
     @State var isRefreshing = false
     @State var isShowingFullList = false
-    @State var searchTerm = ""
+    @State private var  showAddNewAppointment = false
+    
     var lastHour: String? = nil
     
     var body: some View {
+
         
         ZStack(alignment: .bottom){
             Color(red: 0.09019607843137255, green: 0.08627450980392157, blue: 0.10588235294117647)
@@ -190,7 +192,8 @@ struct homeView: View {
                     ZStack(alignment:.leading){
                         
                         HStack {
-                            if(searchTerm.isEmpty) {
+                            if(viewModel.searchText.isEmpty
+                            ) {
                                 Text("Search patinas...")
                                     .foregroundColor(.white.opacity(0.3))
                             }
@@ -200,7 +203,7 @@ struct homeView: View {
                             
                         }.padding()
                         
-                        TextField("Search patinas...", text: $searchTerm)
+                        TextField("Search patinas...", text: $viewModel.searchText)
                             .padding()
                             .foregroundColor(.white.opacity(0.5))
                             .background(.opacity(0.2))
@@ -216,11 +219,15 @@ struct homeView: View {
                             .foregroundColor(.white)
                         Spacer()
                         Button {
+                            viewModel.onlyDone.toggle()
                             
                         } label: {
                             Image("filter")
                                 .resizable()
                                 .frame(width:25,height:25)
+                                .padding(10)
+                                .background(viewModel.onlyDone ? Color(red: 0.050980392156862744, green : 0.047058823529411764, blue: 0.058823529411764705) : .clear)
+                                                                 .clipShape(Circle())
                         }
                         
                         
@@ -231,11 +238,10 @@ struct homeView: View {
                     
                 }
                 
-                if(viewModel.appointments.count != 0 ){
-                    
+                if(!viewModel.stillLoading){
+                    if(viewModel.todaysAppointments.count > 0  ){
                     List {
-                        
-                        ForEach(viewModel.appointments.sorted(), id: \.id) { appointment in
+                        ForEach(viewModel.sortedAppointments, id: \.id) { appointment in
                             
                             HStack(alignment: .top,spacing: 0){
                                 
@@ -299,11 +305,45 @@ struct homeView: View {
                     }
                     //MARK: style the list here
                     .listRowSeparator(.hidden)
-                    
+                   
                     .padding(0)
                     .listStyle(PlainListStyle())
                     .scrollContentBackground(.hidden)
                     
+                }
+                    
+                    else{
+                        VStack(spacing:30){
+                            Text("No Appointment For Today !")
+                                
+                                .foregroundColor(.white)
+                                .font(Font.custom("Poppins-Bold", size: 15))
+                                
+                            
+                            
+                            Button {
+                                
+                                showAddNewAppointment.toggle()
+                            } label: {
+                                Text("Add New Appointment")
+                                    .frame(height: 40)
+                                    .font(Font.custom("Poppins-Bold", size: 15))
+                                    .padding()
+                                    .padding(.horizontal)
+                                    .fontWeight(.bold)
+                                    .font(.system(size: 15))
+                            }
+                            .foregroundColor(.white)
+                            .background(.black)
+                            .cornerRadius(18)
+                            .padding(.bottom)
+                            .sheet(isPresented: $showAddNewAppointment) {
+                                NewAppointmentView()
+                            }
+                        }.frame(maxHeight: .infinity, alignment: .center)
+                        
+                        
+                    }
                     
                     
                     
@@ -340,13 +380,18 @@ struct homeView: View {
             
             if(isShowAppointmentDetails){
                 Color(.black).opacity(isShowAppointmentDetails ? 0.59 : 0)
-                
-                AppointmentDetailsView(id:currentAppointment,ShowDetails: $isShowAppointmentDetails)
-                    .transition(.move(edge: .bottom))
-                    .animation(.spring())
-                    .zIndex(3)
-                
+
+                AppointmentDetailsView(id: currentAppointment, ShowDetails: $isShowAppointmentDetails, onDelete: {
+                    viewModel.fetchData {
+                        viewModel.GettodaysAppointments()
+                    }
+                })
+                .environmentObject(viewModel)
+                .transition(.move(edge: .bottom))
+                .animation(.spring())
+                .zIndex(30)
             }
+
             
         }
         

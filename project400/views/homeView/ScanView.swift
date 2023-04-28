@@ -4,8 +4,7 @@
 //
 //  Created by Omar Alshuaili on 25/04/2023.
 //
-import SwiftUI
-import UIKit
+
 
 //        VStack {
 //            List(scans) { scan in
@@ -17,11 +16,13 @@ import UIKit
 //        }
 import SwiftUI
 import UIKit
+import CoreData
 
 
 struct ScanView: View {
     @FetchRequest(sortDescriptors: []) var scans: FetchedResults<MyScanFiles>
     @State private var selectedImage: UIImage? = nil
+    @Environment(\.managedObjectContext) private var viewContext
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -47,57 +48,64 @@ struct ScanView: View {
                     .offset(x:-15,y:-65)
                 
             } else {
-                ForEach(scans) { scan in
-                    let image : UIImage = UIImage(data: scan.imageData!)!
-                    ScanCard(imageData: image, details: scan.details ?? "", prediction: scan.prediction ?? "", patient: scan.patinet ?? "" , selectedImage: $selectedImage)
-                        .swipeActions(edge: .trailing) {
-                            Button(action: {
-                                deleteScan(scan: scan)
-                            }) {
-                                Label("Delete", systemImage: "trash")
-                            }
-                            .tint(.red)
-                        }
-                }
+                
+                List{
+                    ForEach(scans) { scan in
+                        
+                        ScanCard(imageData: scan.imageData!, details: scan.details ?? "", prediction: scan.prediction ?? "", patient: scan.patinet ?? "" , selectedImage: $selectedImage)
+                    }
+                    .onDelete(perform: deleteScan)
+                    .listRowBackground(Color.clear)
+                        
+                    
+                }.listStyle(.plain)
+                    .listRowBackground(Color.clear)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .edgesIgnoringSafeArea(.all)
         .padding()
         .background(Color(red: 0.09019607843137255, green: 0.08627450980392157, blue: 0.10588235294117647))
-        .overlay(
-            Group {
-                if let image = selectedImage {
-                    ExpandedImageView(image: image, selectedImage: $selectedImage)
-                }
-            }
-        )
+        
     }
     
-    private func deleteScan(scan: MyScanFiles) {
-        let context = ScanCoreData().container.viewContext
-        context.delete(scan)
-        try? context.save()
+  
+
+    func deleteScan(at offsets: IndexSet) {
+        for index in offsets {
+            let scan = scans[index]
+            viewContext.delete(scan)
+        }
+
+        do {
+            try viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
     }
+
 }
 
 
 struct ScanCard: View {
-    let imageData: UIImage
+    let imageData: Data
     let details: String
     let prediction : String
     let patient : String
+    
     @Binding var selectedImage: UIImage?
     @State private var isSheetPresented: Bool = false
     var body: some View {
+        let image : UIImage = UIImage(data: imageData)!
         VStack(alignment: .leading) {
             HStack(alignment: .center, spacing: 15) {
                 
                 
                 Button(action: {
-                    selectedImage = imageData
+                    selectedImage = image
                 }) {
-                    Image(uiImage: imageData)
+                    Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 150, height: 70)
@@ -105,7 +113,7 @@ struct ScanCard: View {
                 }.padding()
                 Spacer()
                 HStack(spacing:15){
-                    Text("97%")
+                    Text(prediction + "%")
                         .font(.system(size: 30))
                         .fontWeight(.bold)
                     Image(systemName: "arrow.right")
@@ -119,7 +127,8 @@ struct ScanCard: View {
                 }
                 .onTapGesture {
                     isSheetPresented = true
-
+                   
+                            
                 }
                 
             }
@@ -131,13 +140,17 @@ struct ScanCard: View {
         
         .sheet(isPresented: $isSheetPresented) {
                     VStack {
-                        Image(uiImage: imageData)
+                        Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .padding()
                         
                         // Add other details here
                         Text(details)
+                            .font(.title)
+                            .padding()
+                        
+                        Text("Patient name: " + patient)
                             .font(.title)
                             .padding()
                         
@@ -148,43 +161,6 @@ struct ScanCard: View {
         
         
         
-    }
-}
-
-struct ExpandedImageView: View {
-    let image: UIImage
-    
-
-    @Binding var selectedImage: UIImage?
-    
-    var body: some View {
-        ZStack {
-            Color.black.opacity(0.5)
-                .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                HStack {
-                    Spacer()
-                    
-                    Button(action: {
-                        selectedImage = nil
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.white)
-                            .font(.system(size: 24))
-                            .padding()
-                    }
-                }
-                
-                Spacer()
-                
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                
-                Spacer()
-            }
-        }
     }
 }
 

@@ -11,6 +11,7 @@ struct BottomBar: View {
     @State private var isShowingSquareCamera = false
     @State private var selectedButton: String? = nil
     @Binding var currentView: AnyView
+    
     var icons = [
         (icon:"home-icon",text:"Home"),
         (icon:"appointments-icon",text:"Calander"),
